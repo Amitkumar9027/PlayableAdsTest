@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial</title>
+    <style>
+               body {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
+            height: 100vh;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* hand sign css */
+.click-hand-wrapper {
+  
+  position: absolute;
+  z-index: 111;
+  left: 52%;
+  top: 56%;
+  display: inline-block;
+  text-align: center;
+  animation: float 2s infinite ease-in-out;
+}
+
+.click-hand {
+  width: 50px;
+  height: 50px;
+  background-image: url('hand2.png'); /* hand icon */
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin: 0 auto;
+  animation: tap 1s infinite ease-in-out;
+}
+
+.click-text {
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  animation: pulse 1.5s infinite;
+}
+
+/* Animations */
+@keyframes tap {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    transform: scale(0.9) translateY(5px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+  @media screen and (max-width:500px) {
+            .click-hand-wrapper{
+                position: absolute;
+                left: 56% !important;
+                top: 60% !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="click-hand-wrapper">
+  <div class="click-hand"></div>
+  <div class="click-text">Click Here</div>
+</div>
+</body>
+</html>

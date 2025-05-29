@@ -1,369 +1,588 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Balloon Pop Fun!</title>
-    <style>
-        /* Internal CSS */
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
-            height: 100vh;
-            touch-action: manipulation;
-            user-select: none;
-            -webkit-user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        #game-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-        
-        #start-screen, #end-screen {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            z-index: 100;
-            text-align: center;
-        }
-        
-        #game-screen {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-        }
-        
-        .balloon {
-            position: absolute;
-            background-size: contain;
-            background-repeat: no-repeat;
-            cursor: pointer;
-            transition: transform 0.1s;
-            /* Default size for desktop */
-            width: 60px;
-            height: 80px;
-        }
-        
-        /* Larger balloons for mobile */
-        @media (max-width: 768px) {
-            .balloon {
-                width: 80px;
-                height: 100px;
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>Balloon Pop Fun!</title>
+        <style>
+            /* Internal CSS */
+            body {
+                position: relative;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                font-family: 'Arial', sans-serif;
+                background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
+                height: 100vh;
+                touch-action: manipulation;
+                user-select: none;
+                -webkit-user-select: none;
+                -webkit-tap-highlight-color: transparent;
+            }
+            /* hand sign css */
+    .click-hand-wrapper {
+    
+    position: absolute;
+    z-index: 111;
+    left: 52%;
+    top: 56%;
+    display: inline-block;
+    text-align: center;
+    animation: float 2s infinite ease-in-out;
+    }
+
+    .click-hand {
+    width: 50px;
+    height: 50px;
+    background-image: url('hand2.png'); /* hand icon */
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin: 0 auto;
+    animation: tap 1s infinite ease-in-out;
+    }
+
+    .click-text {
+    margin-top: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    animation: pulse 1.5s infinite;
+    }
+
+    /* Animations */
+    @keyframes tap {
+    0%, 100% {
+        transform: scale(1) translateY(0);
+    }
+    50% {
+        transform: scale(0.9) translateY(5px);
+    }
+    }
+
+    @keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1.1);
+    }
+    }
+
+    @keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+    }
+
+            #game-container {
+                position: relative;
+                width: 100%;
+                height: 100%;
             }
             
-            h1 {
-                font-size: 2em;
+            #start-screen, #end-screen {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                background-color: rgba(0, 0, 0, 0.7);
+                color: white;
+                z-index: 100;
+                text-align: center;
+            }
+            
+            #game-screen {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+            }
+            .tutorai-screen{
+                position: absolute;
+            background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
+                height: 100vh;  
+                width: 100vw; 
+                z-index: 112;
+            }
+
+            #start-btn{
+                position: absolute;
+                left: 40%;
+                top: 90%;
+            }
+            .visible{
+                display: block;
+            }
+            .unvisible{
+                display: none;
+            }
+            
+            .balloon {
+                position: absolute;
+                background-size: contain;
+                background-repeat: no-repeat;
+                cursor: pointer;
+                transition: transform 0.1s;
+                /* Default size for desktop */
+                width: 60px;
+                height: 80px;
+            }
+            
+            #newBalloon{
+                /* background-color: red; */
+                /* width: 100px;
+                height: 100px; */
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 80"><path fill="red" d="M30 5c-8 0-15 7-15 15 0 10 15 25 15 25s15-15 15-25c0-8-7-15-15-15z"/><path fill="brown" d="M30 60l-5-10h10z"/></svg>');
+            }
+            /* Larger balloons for mobile */
+            @media (max-width: 768px) {
+                .balloon {
+                    width: 80px;
+                    height: 100px;
+                }
+                
+                h1 {
+                    font-size: 2em;
+                }
+                
+                button {
+                    padding: 12px 24px;
+                    font-size: 16px;
+                }
+                
+                #timer, #score-display {
+                    font-size: 20px;
+                }
+            }
+            
+            /* Even larger for very small devices */
+            @media (max-width: 480px) {
+                .balloon {
+                    width: 70px;
+                    height: 90px;
+                }
+            }
+            /* .click-hand-wrapper {
+    
+    left: 56%;
+    top: 60%;
+    } */
+            
+            .balloon:active {
+                transform: scale(1.1);
             }
             
             button {
-                padding: 12px 24px;
-                font-size: 16px;
+                background-color: #FF6B6B;
+                color: white;
+                border: none;
+                padding: 15px 30px;
+                font-size: 18px;
+                border-radius: 30px;
+                margin: 10px;
+                cursor: pointer;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                transition: all 0.3s;
+                min-width: 160px;
+            }
+            
+            button:hover {
+                background-color: #FF8E8E;
+                transform: scale(1.05);
+            }
+            
+            button:active {
+                transform: scale(0.95);
+            }
+            
+            h1 {
+                font-size: 2.5em;
+                margin-bottom: 20px;
+                text-align: center;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+                padding: 0 20px;
             }
             
             #timer, #score-display {
-                font-size: 20px;
+                position: absolute;
+                top: 10px;
+                font-size: 24px;
+                font-weight: bold;
+                color: white;
+                text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+                z-index: 10;
+                padding: 5px 10px;
+                background-color: rgba(0, 0, 0, 0.3);
+                border-radius: 5px;
             }
-        }
-        
-        /* Even larger for very small devices */
-        @media (max-width: 480px) {
-            .balloon {
-                width: 70px;
-                height: 90px;
+            
+            #timer {
+                left: 10px;
             }
-        }
-        
-        .balloon:active {
-            transform: scale(1.1);
-        }
-        
-        button {
-            background-color: #FF6B6B;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            border-radius: 30px;
-            margin: 10px;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s;
-            min-width: 160px;
-        }
-        
-        button:hover {
-            background-color: #FF8E8E;
-            transform: scale(1.05);
-        }
-        
-        button:active {
-            transform: scale(0.95);
-        }
-        
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            padding: 0 20px;
-        }
-        
-        #timer, #score-display {
-            position: absolute;
-            top: 10px;
-            font-size: 24px;
-            font-weight: bold;
-            color: white;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
-            z-index: 10;
-            padding: 5px 10px;
-            background-color: rgba(0, 0, 0, 0.3);
-            border-radius: 5px;
-        }
-        
-        #timer {
-            left: 10px;
-        }
-        
-        #score-display {
-            right: 10px;
-        }
-        
-        #instructions {
-            font-size: 1.2em;
-            margin-bottom: 30px;
-            text-align: center;
-            max-width: 80%;
-            padding: 0 20px;
-        }
-        
-        .hidden {
-            display: none !important;
-        }
-    </style>
-</head>
-<body>
-    <audio id="pop-sound" src="popSound.mp3" preload="auto"></audio>
-    <audio id="game-start" src="game-start-6104.mp3" preload="auto"></audio>
-    <audio id="game-end" src="negative_beeps-6008.mp3" preload="auto"></audio>
-    <audio id="bg-music" src="bgmusic.mp3" preload="auto" loop></audio>
+            
+            #score-display {
+                right: 10px;
+            }
+            
+            #instructions {
+                font-size: 1.2em;
+                margin-bottom: 30px;
+                text-align: center;
+                max-width: 80%;
+                padding: 0 20px;
+            }
+            
+            .hidden {
+                display: none !important;
+            }
+            @media screen and (max-width:500px) {
+                .click-hand-wrapper{
+                    position: absolute;
+                    left: 56% !important;
+                    top: 60% !important;
+                }
+            }
+            .newHandPositionTutorial{
+                left: 53% !important;
+                top: 52% !important;
+            }
+        </style>
+    </head>
+    <body>
+        <audio id="pop-sound" src="popSound.mp3" preload="auto"></audio>
+        <audio id="game-start" src="game-start-6104.mp3" preload="auto"></audio>
+        <audio id="game-end" src="negative_beeps-6008.mp3" preload="auto"></audio>
+        <audio id="bg-music" src="bgmusic.mp3" preload="auto" loop></audio>
 
-    <div id="game-container">
-        <!-- Start Screen -->
-        <div id="start-screen">
-            <h1>Balloon Pop Challenge!</h1>
-            <p id="instructions">Pop as many balloons as you can in 30 seconds!</p>
-            <button id="start-btn">PLAY NOW</button>
-        </div>
+        <!-- hand sign -->
+    <div class="click-hand-wrapper" id="handSign">
+    <div class="click-hand"></div>
+    <div class="click-text" id="handText">Click Here</div>
+    </div>
+    
+<!-- popup box -->
+<!-- Balloon Pop Challenge Themed Popup -->
+<div id="popupBox" class="popup-box" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 320px; background: linear-gradient(135deg, #87CEEB, #E0F7FA); box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3); border-radius: 20px; padding: 20px; text-align: center; z-index: 1000; border: 3px solid #FF6B6B; font-family: 'Arial', sans-serif;">
+
+    <!-- Balloon Icon -->
+    <div style="width: 80px; height: 100px; margin: 0 auto 15px; background-image: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 60 80\'><path fill=\'%23FF4081\' d=\'M30 5c-8 0-15 7-15 15 0 10 15 25 15 25s15-15 15-25c0-8-7-15-15-15z\'/><path fill=\'%23D84315\' d=\'M30 60l-5-10h10z\'/></svg>'); background-size: contain; background-repeat: no-repeat;"></div>
+
+    <!-- Game Title -->
+    <h3 style="color: #FF4081; margin: 10px 0; font-size: 22px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">🎈 Balloon Pop Challenge! 🎈</h3>
+
+    <!-- Content Box -->
+    <div class="ad-container" style="background: rgba(255,255,255,0.8); padding: 12px; border-radius: 12px; border: 2px dashed #FF6B6B; margin-bottom: 15px;">
+        <p style="font-size: 15px; color: #333; font-weight: bold; margin: 5px 0;">Want more exciting levels and power-ups?</p>
         
-        <!-- Game Screen -->
-        <div id="game-screen" class="hidden">
-            <div id="timer">Time: 30s</div>
-            <div id="score-display">Score: 0</div>
-            <!-- Balloons will be generated here by JS -->
-        </div>
-        
-        <!-- End Screen -->
-        <div id="end-screen" class="hidden">
-            <h1>Game Over!</h1>
-            <p id="final-score">You popped 0 balloons!</p>
-            <button id="replay-btn">PLAY AGAIN</button>
-        </div>
+        <!-- CTA Button -->
+        <a class="cta-button" onclick="ExitApi.exit()" style="display: inline-block; background: linear-gradient(to right, #FF6B6B, #FF4081); color: white; text-decoration: none; padding: 10px 20px; font-size: 16px; font-weight: bold; border-radius: 25px; margin-top: 8px; cursor: pointer; box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2); border: none; transition: all 0.3s;">
+            🚀 Upgrade Now!
+        </a>
     </div>
 
-    <script>
-        // Internal JavaScript
-        document.addEventListener('DOMContentLoaded', function() {
-            // Detect mobile device
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            
-            // Game variables
-            let score = 0;
-            let timeLeft = 30;
-            let gameInterval;
-            let timerInterval;
-            let balloonColors = ['red', 'blue', 'green', 'yellow', 'purple'];
-            
-            // DOM elements
-            const startScreen = document.getElementById('start-screen');
-            const gameScreen = document.getElementById('game-screen');
-            const endScreen = document.getElementById('end-screen');
-            const startBtn = document.getElementById('start-btn');
-            const replayBtn = document.getElementById('replay-btn');
-            const timerDisplay = document.getElementById('timer');
-            const scoreDisplay = document.getElementById('score-display');
-            const finalScoreDisplay = document.getElementById('final-score');
-            
-            // Event listeners
-            startBtn.addEventListener('click', startGame);
-            replayBtn.addEventListener('click', startGame);
-            
-            // Start game function
-            function startGame() {
-                // Reset game state
-                score = 0;
-                timeLeft = 30;
-                scoreDisplay.textContent = `Score: ${score}`;
-                timerDisplay.textContent = `Time: ${timeLeft}s`;
-                document.getElementById('game-start').play();
-                
-                // bg music
+    <!-- Game Progress -->
+    <div style="background: rgba(255,255,255,0.7); border-radius: 8px; padding: 8px; margin-bottom: 10px;">
+        <p style="font-size: 14px; color: #333; margin: 5px 0;">Your current score: <span style="color: #FF4081; font-weight: bold;">0</span> balloons</p>
+        <div style="height: 6px; background: #E0F7FA; border-radius: 3px; margin: 5px 0;">
+            <div style="width: 30%; height: 100%; background: linear-gradient(to right, #FFEB3B, #FF9800); border-radius: 3px;"></div>
+        </div>
+        <p style="font-size: 12px; color: #666; margin: 0;">Next reward at 50 balloons</p>
+    </div>
 
-                document.addEventListener("click", () => {
-    const bgMusic = document.getElementById("bg-music");
-    bgMusic.volume = 0.2; // Set lower volume (0 to 1)
-    bgMusic.play();
-}, { once: true }); // Play only on the first click
+    <!-- Close Button -->
+    <button id="closePopup" class="close-btn" style="position: absolute; top: -10px; right: -10px; width: 24px; height: 24px; background: #FF6B6B; color: white; border: none; border-radius: 50%; cursor: pointer; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); font-weight: bold; font-size: 12px; display: flex; align-items: center; justify-content: center;">
+        ✖
+    </button>
 
-                // Clear any existing balloons
-                // gameScreen.innerHTML = '<div id="timer">Time: 30s</div><div id="score-display">Score: 0</div>';
-                // gameScreen.innerHTML = '<div id="timer">Time: 30s</div><div id="score-display">Score: 0</div>';
+    <!-- Floating Balloons Decoration -->
+    <div style="position: absolute; top: -15px; left: 20px; width: 30px; height: 40px; background-image: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 30 40\'><path fill=\'%234CAF50\' d=\'M15 3c-6 0-10 5-10 10 0 8 10 18 10 18s10-10 10-18c0-5-4-10-10-10z\'/><path fill=\'%23D84315\' d=\'M15 38l-3-6h6z\'/></svg>'); background-size: contain;"></div>
 
-// 🔁 Reassign the DOM references
-// timerDisplay = document.getElementById('timer');
-// scoreDisplay = document.getElementById('score-display');
+    <div style="position: absolute; bottom: -10px; right: 20px; width: 25px; height: 35px; background-image: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 25 35\'><path fill=\'%232196F3\' d=\'M12 2c-5 0-9 4-9 9 0 7 9 15 9 15s9-8 9-15c0-5-4-9-9-9z\'/><path fill=\'%23D84315\' d=\'M12 32l-3-5h6z\'/></svg>'); background-size: contain;"></div>
+</div>
 
-                // Show game screen
-                startScreen.classList.add('hidden');
-                endScreen.classList.add('hidden');
-                gameScreen.classList.remove('hidden');
-                
-                // Adjust game difficulty based on device
-                const balloonInterval = isMobile ? 1000 : 800;
-                gameInterval = setInterval(createBalloon, balloonInterval);
-                
-                // Start timer
-                timerInterval = setInterval(function() {
-                    timeLeft--;
-                    timerDisplay.textContent = `Time: ${timeLeft}s`;
-                    
-                    if (timeLeft <= 0) {
-                        endGame();
-                    }
-                }, 1000);
-            }
-            
-            // Create balloon function
-            function createBalloon() {
-                if (timeLeft <= 0) return;
-                
-                const balloon = document.createElement('div');
-                balloon.className = 'balloon';
-                
-                // Set balloon size based on device
-                if (isMobile) {
-                    balloon.style.width = '80px';
-                    balloon.style.height = '100px';
-                }
-                
-                // Random position (keeping within screen bounds)
-                const maxWidth = window.innerWidth - parseInt(balloon.style.width || '60');
-                const xPos = Math.random() * maxWidth;
-                const yPos = window.innerHeight;
-                
-                // Random color
-                const color = balloonColors[Math.floor(Math.random() * balloonColors.length)];
-                balloon.style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 80"><path fill="${color}" d="M30 5c-8 0-15 7-15 15 0 10 15 25 15 25s15-15 15-25c0-8-7-15-15-15z"/><path fill="brown" d="M30 60l-5-10h10z"/></svg>')`;
-                
-                // Set initial position
-                balloon.style.left = `${xPos}px`;
-                balloon.style.bottom = `-${parseInt(balloon.style.height || '80')}px`;
-                
-                // Add click handler
-                balloon.addEventListener('click', function() {
-                    popBalloon(this);
-                });
-                
-                // Add touch handler for mobile
-                balloon.addEventListener('touchend', function(e) {
-                    e.preventDefault();
-                    popBalloon(this);
-                });
-                
-                gameScreen.appendChild(balloon);
-                
-                // Animate balloon rising with device-appropriate speed
-                const riseSpeed = isMobile ? 1.5 + Math.random() * 2 : 2 + Math.random() * 3;
-                let currentPos = -parseInt(balloon.style.height || '80');
-                
-                const riseInterval = setInterval(function() {
-                    currentPos += riseSpeed;
-                    balloon.style.bottom = `${currentPos}px`;
-                    
-                    // Remove balloon if it goes off screen or game is over
-                    if (currentPos > window.innerHeight || timeLeft <= 0) {
-                        clearInterval(riseInterval);
-                        balloon.remove();
-                    }
-                }, 16);
-            }
-            
-            // Pop balloon function
-            function popBalloon(balloon) {
-                // Add pop animation
-                balloon.style.backgroundImage = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 60 80\"><path fill=\"white\" d=\"M30 5l-5 10 5 5 5-5zM20 15l-5 10 10 5 5-10zM40 15l5 10-5 10-10-5zM25 30l-5 10 10 10 5-10zM35 30l5 10-10 10-5-10z\"/></svg>')";
-                document.getElementById('pop-sound').play();
 
-                // Remove balloon after short delay
-                setTimeout(() => {
-                    balloon.remove();
-                }, 100);
-                
-                // Increase score
-                score++;
-                scoreDisplay.textContent = `Score: ${score}`;
-            }
-            
-            // End game function
-            function endGame() {
-                clearInterval(gameInterval);
-                clearInterval(timerInterval);
-                document.getElementById('game-end').play();
-                document.getElementById('bg-music').pause();
-                // Show end screen
-                gameScreen.classList.add('hidden');
-                endScreen.classList.remove('hidden');
-                finalScoreDisplay.textContent = `You popped ${score} balloons!`;
-                
-                // Clear all remaining balloons
-                const balloons = document.querySelectorAll('.balloon');
-                balloons.forEach(balloon => balloon.remove());
-            }
-            
-            // Handle window resize
-            window.addEventListener('resize', function() {
-                // Adjust any balloons that might be affected by resize
-                const balloons = document.querySelectorAll('.balloon');
-                balloons.forEach(balloon => {
-                    const currentLeft = parseInt(balloon.style.left);
-                    const maxWidth = window.innerWidth - parseInt(balloon.style.width || '60');
-                    
-                    // Keep balloon within new screen bounds
-                    if (currentLeft > maxWidth) {
-                        balloon.style.left = `${maxWidth}px`;
-                    }
-                });
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Show popup after 15 seconds
+        setTimeout(function() {
+            document.getElementById("popupBox").style.display = "block";
+        }, 15000); // 15000ms = 15 seconds
+    
+        // Open popup when an image with the class "popup-trigger" is clicked
+        document.querySelectorAll(".popup-trigger").forEach(img => {
+            img.addEventListener("click", function() {
+                document.getElementById("popupBox").style.display = "block";
             });
-            
-            // Prevent touch scroll
-            document.addEventListener('touchmove', function(e) {
-                if (e.target.className === 'balloon') {
-                    e.preventDefault();
-                }
-            }, { passive: false });
         });
+    
+        // Close popup when the close button is clicked
+        document.getElementById("closePopup").addEventListener("click", function() {
+            document.getElementById("popupBox").style.display = "none";
+        });
+    });
     </script>
-</body>
-</html>
+<!-- popup box -->
+
+        <!-- hand sign end -->
+
+        <div id="game-container">
+            <!-- Tutorial screen -->
+            <div class="tutorai-screen unvisible" id="tutorial-screen">
+                    <div class="balloon" id="newBalloon"></div>
+                    <button id="start-btn" class="unvisible">PLAY NOW</button>
+            </div>
+            <!-- Tutorial screen end -->
+            <!-- Start Screen -->
+            <div id="start-screen">
+                <h1>Balloon Pop Challenge!</h1>
+                <p id="instructions">Pop as many balloons as you can in 30 seconds!</p>
+                <button id="playBtn" >START</button>
+            </div>
+            
+            <!-- Game Screen -->
+            <div id="game-screen" class="hidden">
+                <div id="timer">Time: 30s</div>
+                <div id="score-display">Score: 0</div>
+                <!-- Balloons will be generated here by JS -->
+            </div>
+            
+            <!-- End Screen -->
+            <div id="end-screen" class="hidden">
+                <h1>Game Over!</h1>
+                <p id="final-score">You popped 0 balloons!</p>
+                <button id="replay-btn">PLAY AGAIN</button>
+            </div>
+        </div>
+
+        <script>
+            // Internal JavaScript
+            document.addEventListener('DOMContentLoaded', function() {
+                // Detect mobile device
+                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                
+                // Game variables
+                let score = 0;
+                let timeLeft = 30;
+                let gameInterval;
+                let timerInterval;
+                let balloonColors = ['red', 'blue', 'green', 'yellow', 'purple'];
+                
+                // DOM elements
+                const startScreen = document.getElementById('start-screen');
+                const gameScreen = document.getElementById('game-screen');
+                const endScreen = document.getElementById('end-screen');
+                const startBtn = document.getElementById('start-btn');
+                const replayBtn = document.getElementById('replay-btn');
+                const timerDisplay = document.getElementById('timer');
+                const scoreDisplay = document.getElementById('score-display');
+                const finalScoreDisplay = document.getElementById('final-score');
+                const newBalloon=document.getElementById('newBalloon');
+                const playBtn=document.getElementById('playBtn');
+                const handSign=document.getElementById('handSign');
+                const handText= document.getElementById('handText');
+                
+                        const TutorialScreen=document.getElementById('tutorial-screen');
+                
+                // Event listeners
+                playBtn.addEventListener('click', startTutorial);
+                startBtn.addEventListener('click', startGame)
+
+                replayBtn.addEventListener('click', startGame);
+                newBalloon.addEventListener('click',()=>{
+                          
+  setTimeout(() => {
+    startBtn.classList.remove('unvisible');
+    handSign.classList.add('unvisible');
+  }, 200); // 
+
+
+                });
+
+                
+                    function startTutorial(){
+                        // console.log(TutorialScreen)
+
+                        TutorialScreen.classList.remove('unvisible')
+                        TutorialScreen.classList.add('visible');
+                            handSign.style.zIndex="114";
+                            handSign.classList.add('newHandPositionTutorial');
+                            handText.innerText="Tap to Burst"
+                            handText.style.color="black"
+                    
+                        
+
+                    }
+                // Start game function
+                function startGame() {
+                    // Reset game state
+                    TutorialScreen.classList.add('unvisible')
+                    score = 0;
+                    timeLeft = 30;
+                    scoreDisplay.textContent = `Score: ${score}`;
+                    timerDisplay.textContent = `Time: ${timeLeft}s`;
+                    document.getElementById('game-start').play();
+                    
+                        // TutorialScreen.classList.remove('unvisible')
+
+                    // bg music
+
+                    document.addEventListener("click", () => {
+        const bgMusic = document.getElementById("bg-music");
+        bgMusic.volume = 0.2; // Set lower volume (0 to 1)
+        bgMusic.play();
+    }, { once: true }); // Play only on the first click
+
+                    // Clear any existing balloons
+                    // gameScreen.innerHTML = '<div id="timer">Time: 30s</div><div id="score-display">Score: 0</div>';
+                    // gameScreen.innerHTML = '<div id="timer">Time: 30s</div><div id="score-display">Score: 0</div>';
+
+    // 🔁 Reassign the DOM references
+    // timerDisplay = document.getElementById('timer');
+    // scoreDisplay = document.getElementById('score-display');
+
+                    // Show game screen
+                    startScreen.classList.add('hidden');
+                    endScreen.classList.add('hidden');
+                    gameScreen.classList.remove('hidden');
+                    
+                    // Adjust game difficulty based on device
+                    const balloonInterval = isMobile ? 1000 : 800;
+                    gameInterval = setInterval(createBalloon, balloonInterval);
+                    
+                    // Start timer
+                    timerInterval = setInterval(function() {
+                        timeLeft--;
+                        timerDisplay.textContent = `Time: ${timeLeft}s`;
+                        
+                        if (timeLeft <= 0) {
+                            endGame();
+                        }
+                    }, 1000);
+                }
+                
+                newBalloon.addEventListener('click', function() {
+                        popBalloon(this);
+                    });
+
+                // Create balloon function
+                function createBalloon() {
+                    if (timeLeft <= 0) return;
+                    
+                    const balloon = document.createElement('div');
+                    balloon.className = 'balloon';
+                    
+                    // Set balloon size based on device
+                    if (isMobile) {
+                        balloon.style.width = '80px';
+                        balloon.style.height = '100px';
+                    }
+                    
+                    // Random position (keeping within screen bounds)
+                    const maxWidth = window.innerWidth - parseInt(balloon.style.width || '60');
+                    const xPos = Math.random() * maxWidth;
+                    const yPos = window.innerHeight;
+                    
+                    // Random color
+                    const color = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+                    balloon.style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 80"><path fill="${color}" d="M30 5c-8 0-15 7-15 15 0 10 15 25 15 25s15-15 15-25c0-8-7-15-15-15z"/><path fill="brown" d="M30 60l-5-10h10z"/></svg>')`;
+                    
+                    // Set initial position
+                    balloon.style.left = `${xPos}px`;
+                    balloon.style.bottom = `-${parseInt(balloon.style.height || '80')}px`;
+                    
+                    // Add click handler
+                    balloon.addEventListener('click', function() {
+                        popBalloon(this);
+                    });
+                    
+                    // Add touch handler for mobile
+                    balloon.addEventListener('touchend', function(e) {
+                        e.preventDefault();
+                        popBalloon(this);
+                    });
+                    
+                    gameScreen.appendChild(balloon);
+                    
+                    // Animate balloon rising with device-appropriate speed
+                    const riseSpeed = isMobile ? 1.5 + Math.random() * 2 : 2 + Math.random() * 3;
+                    let currentPos = -parseInt(balloon.style.height || '80');
+                    
+                    const riseInterval = setInterval(function() {
+                        currentPos += riseSpeed;
+                        balloon.style.bottom = `${currentPos}px`;
+                        
+                        // Remove balloon if it goes off screen or game is over
+                        if (currentPos > window.innerHeight || timeLeft <= 0) {
+                            clearInterval(riseInterval);
+                            balloon.remove();
+                        }
+                    }, 16);
+                }
+                
+                // Pop balloon function
+                function popBalloon(balloon) {
+                    // Add pop animation
+                    balloon.style.backgroundImage = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 60 80\"><path fill=\"white\" d=\"M30 5l-5 10 5 5 5-5zM20 15l-5 10 10 5 5-10zM40 15l5 10-5 10-10-5zM25 30l-5 10 10 10 5-10zM35 30l5 10-10 10-5-10z\"/></svg>')";
+                    document.getElementById('pop-sound').play();
+
+                    // Remove balloon after short delay
+                    setTimeout(() => {
+                        balloon.remove();
+                    }, 100);
+                    
+                    // Increase score
+                    score++;
+                    scoreDisplay.textContent = `Score: ${score}`;
+                }
+                
+                // End game function
+                function endGame() {
+                    clearInterval(gameInterval);
+                    clearInterval(timerInterval);
+                    document.getElementById('game-end').play();
+                    document.getElementById('bg-music').pause();
+                    // Show end screen
+                    gameScreen.classList.add('hidden');
+                    endScreen.classList.remove('hidden');
+                    finalScoreDisplay.textContent = `You popped ${score} balloons!`;
+                    
+                    // Clear all remaining balloons
+                    const balloons = document.querySelectorAll('.balloon');
+                    balloons.forEach(balloon => balloon.remove());
+                }
+                
+                // Handle window resize
+                window.addEventListener('resize', function() {
+                    // Adjust any balloons that might be affected by resize
+                    const balloons = document.querySelectorAll('.balloon');
+                    balloons.forEach(balloon => {
+                        const currentLeft = parseInt(balloon.style.left);
+                        const maxWidth = window.innerWidth - parseInt(balloon.style.width || '60');
+                        
+                        // Keep balloon within new screen bounds
+                        if (currentLeft > maxWidth) {
+                            balloon.style.left = `${maxWidth}px`;
+                        }
+                    });
+                });
+                
+                // Prevent touch scroll
+                document.addEventListener('touchmove', function(e) {
+                    if (e.target.className === 'balloon') {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+            });
+        </script>
+    </body>
+    </html>
