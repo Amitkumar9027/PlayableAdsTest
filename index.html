@@ -4,259 +4,396 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <title>Balloon Pop Fun!</title>
-        <style>
-            /* Internal CSS */
-            body {
-                position: relative;
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
-                font-family: 'Arial', sans-serif;
-                background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
-                height: 100vh;
-                touch-action: manipulation;
-                user-select: none;
-                -webkit-user-select: none;
-                -webkit-tap-highlight-color: transparent;
-            }
-            /* hand sign css */
-    .click-hand-wrapper {
+      <style>
+    /* Base styles */
+    body {
+        position: relative;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
+        height: 100vh;
+        touch-action: manipulation;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    #game-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
     
-    position: absolute;
-    z-index: 111;
-    left: 52%;
-    top: 56%;
-    display: inline-block;
-    text-align: center;
-    animation: float 2s infinite ease-in-out;
+    #start-screen, #end-screen {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        z-index: 100;
+        text-align: center;
+    }
+    
+    #game-screen {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+
+    .tutorai-screen {
+        position: absolute;
+        background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
+        height: 100vh;  
+        width: 100vw; 
+        z-index: 112;
+    }
+
+    .balloon {
+        position: absolute;
+        background-size: contain;
+        background-repeat: no-repeat;
+        cursor: pointer;
+        transition: transform 0.1s;
+    }
+
+    #newBalloon {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 80"><path fill="red" d="M30 5c-8 0-15 7-15 15 0 10 15 25 15 25s15-15 15-25c0-8-7-15-15-15z"/><path fill="brown" d="M30 60l-5-10h10z"/></svg>');
+    }
+
+    .balloon:active {
+        transform: scale(1.1);
+    }
+
+    button {
+        background-color: #FF6B6B;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        font-size: 18px;
+        border-radius: 30px;
+        margin: 10px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s;
+        min-width: 160px;
+    }
+    
+    button:hover {
+        background-color: #FF8E8E;
+        transform: scale(1.05);
+    }
+    
+    button:active {
+        transform: scale(0.95);
+    }
+
+    h1 {
+        margin-bottom: 20px;
+        text-align: center;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        padding: 0 20px;
+    }
+
+    #timer, #score-display {
+        position: absolute;
+        top: 10px;
+        font-weight: bold;
+        color: white;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+        z-index: 10;
+        padding: 5px 10px;
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+    }
+
+    #timer {
+        left: 10px;
+    }
+
+    #score-display {
+        right: 10px;
+    }
+
+    #instructions {
+        margin-bottom: 30px;
+        text-align: center;
+        max-width: 80%;
+        padding: 0 20px;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    /* Hand sign styles */
+    .click-hand-wrapper {
+        position: absolute;
+        z-index: 111;
+        left: 52%;
+        top: 56%;
+        display: inline-block;
+        text-align: center;
+        animation: float 2s infinite ease-in-out;
     }
 
     .click-hand {
-    width: 50px;
-    height: 50px;
-    background-image: url('hand2.png'); /* hand icon */
-    background-size: contain;
-    background-repeat: no-repeat;
-    margin: 0 auto;
-    animation: tap 1s infinite ease-in-out;
+        width: 50px;
+        height: 50px;
+        background-image: url('hand2.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        margin: 0 auto;
+        animation: tap 1s infinite ease-in-out;
     }
 
     .click-text {
-    margin-top: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    animation: pulse 1.5s infinite;
+        margin-top: 8px;
+        font-weight: bold;
+        color: #fff;
+        animation: pulse 1.5s infinite;
     }
 
     /* Animations */
     @keyframes tap {
-    0%, 100% {
-        transform: scale(1) translateY(0);
-    }
-    50% {
-        transform: scale(0.9) translateY(5px);
-    }
+        0%, 100% {
+            transform: scale(1) translateY(0);
+        }
+        50% {
+            transform: scale(0.9) translateY(5px);
+        }
     }
 
     @keyframes pulse {
-    0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    50% {
-        opacity: 0.6;
-        transform: scale(1.1);
-    }
+        0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.6;
+            transform: scale(1.1);
+        }
     }
 
     @keyframes float {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-5px);
-    }
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-5px);
+        }
     }
 
-            #game-container {
-                position: relative;
-                width: 100%;
-                height: 100%;
-            }
-            
-            #start-screen, #end-screen {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                background-color: rgba(0, 0, 0, 0.7);
-                color: white;
-                z-index: 100;
-                text-align: center;
-            }
-            
-            #game-screen {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-            }
-            .tutorai-screen{
-                position: absolute;
-            background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
-                height: 100vh;  
-                width: 100vw; 
-                z-index: 112;
-            }
+    /* Responsive breakpoints */
+    /* Extra small devices (phones, 400px and down) */
+    @media (max-width: 400px) {
+        .balloon {
+            width: 50px;
+            height: 70px;
+        }
+        
+        h1 {
+            font-size: 1.5em;
+        }
+        
+        button {
+            padding: 10px 20px;
+            font-size: 14px;
+            min-width: 120px;
+        }
+        
+        #timer, #score-display {
+            font-size: 16px;
+        }
+        
+        #instructions {
+            font-size: 1em;
+        }
+        
+        .click-hand-wrapper {
+            left: 58% !important;
+            top: 62% !important;
+        }
+        
+        .click-hand {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .click-text {
+            font-size: 12px;
+        }
+    }
 
-            #start-btn{
-                position: absolute;
-                left: 40%;
-                top: 90%;
-            }
-            .visible{
-                display: block;
-            }
-            .unvisible{
-                display: none;
-            }
-            
-            .balloon {
-                position: absolute;
-                background-size: contain;
-                background-repeat: no-repeat;
-                cursor: pointer;
-                transition: transform 0.1s;
-                /* Default size for desktop */
-                width: 60px;
-                height: 80px;
-            }
-            
-            #newBalloon{
-                /* background-color: red; */
-                /* width: 100px;
-                height: 100px; */
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 80"><path fill="red" d="M30 5c-8 0-15 7-15 15 0 10 15 25 15 25s15-15 15-25c0-8-7-15-15-15z"/><path fill="brown" d="M30 60l-5-10h10z"/></svg>');
-            }
-            /* Larger balloons for mobile */
-            @media (max-width: 768px) {
-                .balloon {
-                    width: 80px;
-                    height: 100px;
-                }
-                
-                h1 {
-                    font-size: 2em;
-                }
-                
-                button {
-                    padding: 12px 24px;
-                    font-size: 16px;
-                }
-                
-                #timer, #score-display {
-                    font-size: 20px;
-                }
-            }
-            
-            /* Even larger for very small devices */
-            @media (max-width: 480px) {
-                .balloon {
-                    width: 70px;
-                    height: 90px;
-                }
-            }
-            /* .click-hand-wrapper {
+    /* Small devices (phones, 400px to 600px) */
+    @media (min-width: 401px) and (max-width: 600px) {
+        .balloon {
+            width: 60px;
+            height: 80px;
+        }
+        
+        h1 {
+            font-size: 1.8em;
+        }
+        
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+        }
+        
+        #timer, #score-display {
+            font-size: 18px;
+        }
+        
+        #instructions {
+            font-size: 1.1em;
+        }
+        
+        .click-hand-wrapper {
+            left: 56% !important;
+            top: 60% !important;
+        }
+    }
+
+    /* Medium devices (tablets, 601px to 768px) */
+    @media (min-width: 601px) and (max-width: 768px) {
+        .balloon {
+            width: 70px;
+            height: 90px;
+        }
+        
+        h1 {
+            font-size: 2em;
+        }
+        
+        button {
+            padding: 14px 28px;
+            font-size: 17px;
+        }
+        
+        #timer, #score-display {
+            font-size: 20px;
+        }
+        
+        #instructions {
+            font-size: 1.2em;
+        }
+        
+        .click-hand-wrapper {
+            left: 54% !important;
+            top: 58% !important;
+        }
+    }
+
+    /* Large devices (laptops/desktops, 769px to 1024px) */
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .balloon {
+            width: 65px;
+            height: 85px;
+        }
+        
+        h1 {
+            font-size: 2.3em;
+        }
+        
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+        }
+        
+        #timer, #score-display {
+            font-size: 22px;
+        }
+        
+        #instructions {
+            font-size: 1.3em;
+        }
+    }
+
+    /* Extra large devices (large laptops and desktops, 1025px and up) */
+    @media (min-width: 1025px) {
+        .balloon {
+            width: 60px;
+            height: 80px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+        }
+        
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+        }
+        
+        #timer, #score-display {
+            font-size: 24px;
+        }
+        
+        #instructions {
+            font-size: 1.4em;
+        }
+    }
+
+    /* Special landscape orientation adjustments */
+    @media (orientation: landscape) and (max-height: 500px) {
+        .balloon {
+            width: 50px;
+            height: 70px;
+        }
+        
+        h1 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        button {
+            padding: 8px 16px;
+            font-size: 14px;
+            min-width: 100px;
+            margin: 5px;
+        }
+        
+        #instructions {
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        
+        .click-hand-wrapper {
+            transform: scale(0.8);
+        }
+    }
+
+    /* New hand position for tutorial */
+    .newHandPositionTutorial {
+        left: 53% !important;
+        top: 52% !important;
+    }
     
-    left: 56%;
-    top: 60%;
-    } */
-            
-            .balloon:active {
-                transform: scale(1.1);
-            }
-            
-            button {
-                background-color: #FF6B6B;
-                color: white;
-                border: none;
-                padding: 15px 30px;
-                font-size: 18px;
-                border-radius: 30px;
-                margin: 10px;
-                cursor: pointer;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                transition: all 0.3s;
-                min-width: 160px;
-            }
-            
-            button:hover {
-                background-color: #FF8E8E;
-                transform: scale(1.05);
-            }
-            
-            button:active {
-                transform: scale(0.95);
-            }
-            
-            h1 {
-                font-size: 2.5em;
-                margin-bottom: 20px;
-                text-align: center;
-                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-                padding: 0 20px;
-            }
-            
-            #timer, #score-display {
-                position: absolute;
-                top: 10px;
-                font-size: 24px;
-                font-weight: bold;
-                color: white;
-                text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
-                z-index: 10;
-                padding: 5px 10px;
-                background-color: rgba(0, 0, 0, 0.3);
-                border-radius: 5px;
-            }
-            
-            #timer {
-                left: 10px;
-            }
-            
-            #score-display {
-                right: 10px;
-            }
-            
-            #instructions {
-                font-size: 1.2em;
-                margin-bottom: 30px;
-                text-align: center;
-                max-width: 80%;
-                padding: 0 20px;
-            }
-            
-            .hidden {
-                display: none !important;
-            }
-            @media screen and (max-width:500px) {
-                .click-hand-wrapper{
-                    position: absolute;
-                    left: 56% !important;
-                    top: 60% !important;
-                }
-            }
-            .newHandPositionTutorial{
-                left: 53% !important;
-                top: 52% !important;
-            }
-        </style>
+    /* Visibility classes */
+    .visible {
+        display: block;
+    }
+    
+    .unvisible {
+        display: none;
+    }
+    
+    #start-btn {
+        position: absolute;
+        left: 50%;
+        top: 90%;
+        transform: translateX(-50%);
+    }
+</style>
     </head>
     <body>
         <audio id="pop-sound" src="popSound.mp3" preload="auto"></audio>
